@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  postgresql:
+    container_name: postgreSQL
+    image: docker.io/postgres:14.2
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: restaurante_producao
+    ports:
+      - 5433:5432
+    networks: 
+      - restaurante_producao
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgAdmin
+    image: docker.io/dpage/pgadmin4:7.7
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    ports:
+      - 15433:80
+    depends_on:
+      - postgresql
+    networks: 
+      - restaurante_producao
+  
+networks:
+  restaurante_producao:
+    driver: bridge
+volumes:
+  postgresql:
